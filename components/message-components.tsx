@@ -1,6 +1,7 @@
 "use client";
 
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import type { MessageContent } from "@/lib/claude-data";
@@ -38,6 +39,32 @@ export const markdownComponents = {
       </code>
     );
   },
+  table: ({ children }: { children?: React.ReactNode }) => (
+    <div className="overflow-x-auto my-4">
+      <table className="min-w-full border-collapse border border-gray-600">
+        {children}
+      </table>
+    </div>
+  ),
+  thead: ({ children }: { children?: React.ReactNode }) => (
+    <thead className="bg-gray-800">{children}</thead>
+  ),
+  tbody: ({ children }: { children?: React.ReactNode }) => (
+    <tbody>{children}</tbody>
+  ),
+  tr: ({ children }: { children?: React.ReactNode }) => (
+    <tr className="border-b border-gray-600">{children}</tr>
+  ),
+  th: ({ children }: { children?: React.ReactNode }) => (
+    <th className="px-3 py-2 text-left text-sm font-semibold text-gray-200 border border-gray-600">
+      {children}
+    </th>
+  ),
+  td: ({ children }: { children?: React.ReactNode }) => (
+    <td className="px-3 py-2 text-sm text-gray-300 border border-gray-600">
+      {children}
+    </td>
+  ),
 };
 
 export function MessageContentView({ content }: { content: MessageContent[] | string | undefined }) {
@@ -49,7 +76,7 @@ export function MessageContentView({ content }: { content: MessageContent[] | st
   if (typeof content === "string") {
     return (
       <div className="prose prose-invert prose-sm max-w-none">
-        <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>{content}</ReactMarkdown>
       </div>
     );
   }
@@ -64,7 +91,7 @@ export function MessageContentView({ content }: { content: MessageContent[] | st
         if (item.type === "text" && item.text) {
           return (
             <div key={index} className="prose prose-invert prose-sm max-w-none">
-              <ReactMarkdown components={markdownComponents}>{item.text}</ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>{item.text}</ReactMarkdown>
             </div>
           );
         }
@@ -74,7 +101,7 @@ export function MessageContentView({ content }: { content: MessageContent[] | st
             <div key={index} className="my-2">
               <div className="text-gray-500 text-sm mb-1">Thinking</div>
               <div className="prose prose-invert prose-sm max-w-none text-gray-400">
-                <ReactMarkdown components={markdownComponents}>{thinkingText}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>{thinkingText}</ReactMarkdown>
               </div>
             </div>
           );
