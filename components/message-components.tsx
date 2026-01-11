@@ -104,7 +104,7 @@ export function MessageContentView({ content }: { content: MessageContent[] | st
               <div className="text-gray-500 text-sm mb-1">Tool: {item.name}</div>
               {detail && (
                 <pre className="text-xs text-gray-400 whitespace-pre-wrap break-all">
-                  {detail.length > 500 ? detail.slice(0, 500) + "..." : detail}
+                  {detail}
                 </pre>
               )}
             </div>
@@ -117,9 +117,8 @@ export function MessageContentView({ content }: { content: MessageContent[] | st
               {item.content && (
                 <pre className="text-xs text-gray-400 whitespace-pre-wrap break-all">
                   {typeof item.content === "string"
-                    ? item.content.slice(0, 500)
-                    : JSON.stringify(item.content).slice(0, 500)}
-                  {(item.content?.length || 0) > 500 && "..."}
+                    ? item.content
+                    : JSON.stringify(item.content, null, 2)}
                 </pre>
               )}
             </div>
